@@ -38,16 +38,6 @@ then
         X=$(pwd)
         N=$1
         echo  "Directory not specified.Creating report for current directory."
-# If variable X is set and is a directory, we create report for this directory
-elif [[ -n "$X"  && -d "$X" ]]
-then
-        echo "Creating report for directory $X"
-# If X is numeric which means user didn't provide folder, but wants to provide number of lines, X is set to current directory and N becomes the first argument
-elif ((X))
-then
-        X=$(pwd)
-        N=$1
-        echo  "Directory not specified.Creating report for current directory."
 # In all other cases X is set to something but is not a directory or a number, we set default again and print this message in case the user did a mistake
 else
         X=$(pwd)

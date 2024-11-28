@@ -136,15 +136,17 @@ do
         first_sequence=$(grep -v "^>" "$file" | head )
 
        # Check for Nucleotide (DNA/RNA) sequences
-       # Checking that first_sequence contains ONLY valid  characters: A,T,G,C,U, or literal "-" (for alignment files)
+       # Checking that first_sequence contains ONLY valid  characters: A,T,G,C,U,N (unknown nucleotide) or literal "-" (for alignment files) 
+       # Adding case insensitive for some files that use lowercase to mark regions or features
        # Backslash \ in \- because otherwise it will understand it as space 
-        if echo "$first_sequence" | grep -q  "^[ATCGU\-]*$" && ! echo "$first_sequence" | grep -q "[^ATCGU\-]"
+        if echo "$first_sequence" | grep -q -i "^[ATCGUN\-]*$" && ! echo "$first_sequence" | grep -q -i "[^ATCGUN\-]"
         then
                 echo "Sequence type: Nucleotide (DNA/RNA)"
 
        # Check for Protein sequences (including U=selenocysteine, X=ambiguous residues, O=Pyrolysine, "-"=alignment files)
        # Checking that first_sequence contains ONLY valid characters: all 20 basic amino acids symbols & U,X,O,"-"
-        elif echo "$first_sequence" | grep -q  "^[ACDEFGHIKLMNPQRSTVWYOUX\-]*$" && ! echo "$first_sequence" | grep -q "[^ACDEFGHIKLMNPQRSTVWYOUX\-]"
+       # Adding case insesitive for files that use lowercase to mark regions or features
+        elif echo "$first_sequence" | grep -q -i  "^[ACDEFGHIKLMNPQRSTVWYOUX\-]*$" && ! echo "$first_sequence" | grep -q -i "[^ACDEFGHIKLMNPQRSTVWYOUX\-]"
         then
                 echo "Sequence type: Protein (Amino Acid)"
         #If it is not protein and not DNA/RNA then we print a message for the user about finding invalid characters

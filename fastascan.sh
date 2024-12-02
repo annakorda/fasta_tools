@@ -58,7 +58,7 @@ then
 elif [[ -n "$N" ]] &&  ((N))
 then
         echo "Number of lines is set to $N"
-# In all other cases N is set to something but not numeric, we ser N=0 and print a warning message in case user did a mistake
+# In all other cases N is set to something but not numeric, we set N=0 and print a warning message in case user did a mistake
 else
         N=0
         echo "Input argument N is not numerical.It is automatically set to 0."
@@ -66,9 +66,8 @@ fi
 
 ############ Report: File counts #######################################################################################################################################################
 
-# Some headers and spaces for the report to look good
 echo " "
-echo "******************************* REPORT *********************************************************************************************************************************************"
+echo "******************************* REPORT *************************************************************************************************************************************************"
 echo ""
 
 # Setting fastas variable which contains .fa or .fasta files in specified folder  
@@ -78,11 +77,16 @@ fastas=$(find "$X" -type f -name "*.fa" -or -name "*.fasta")
 if [[ -z "$fastas" ]]
 then
         echo "There are no .fa or .fasta files in folder $X"
-# In case .fa or .fasta files are found, count their number and print a message for the user
-else
-        file_count=$(echo "$fastas" | wc -l)
-        echo "Number of FASTA files: $file_count"
+	echo ""
+        echo "****************************************************************************************************************************************************************************************"
+
+exit 0
 fi
+
+# In case .fa or .fasta files are found, count their number and print a message for the user
+
+file_count=$(echo "$fastas" | wc -l)
+echo "Number of FASTA files: $file_count"
 
 ############ Report: Unique FASTA IDs ##################################################################################################################################################
 #Setting Unique variable which first greps all headers, then keeps only the IDs, then sorts them (prerequisite for uniq), then finds unique IDs and counts them
@@ -113,7 +117,7 @@ do
        echo " "
         # Setting variable total_length:If there are sequences found in the file, then count their total length 
         # by grepping all the lines that don´t contain ">" removing spaces and hidden characters for each line 
-        # then summing them. Print a message for the user.
+        # then summing their characters. Print a message for the user.
         if [[ $seq_count -gt 0 ]]
         then
                 total_length=$(grep -v ">" $file | awk '{gsub(/[ -]/, ""); total += length} END {print total}')
@@ -173,9 +177,6 @@ do
                         echo ...
                         tail -n $N $file
                 fi
-        #If N is zero skip this step
-        else
-                continue
         fi
         echo ""
 
